@@ -1,3 +1,3 @@
-module github.com/kavix/pqc-gate
+module github.com/kavix/qgate
 
 go 1.23
