@@ -1,4 +1,37 @@
+# Binaries and build outputs
 bin/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test outputs and coverage
+*.out
+*.test
+coverage.txt
+coverage.html
+
+# Cryptographic keys and certs
 *.key
 *.pem
+*.crt
+*.csr
+*.pub
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
