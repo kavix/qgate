@@ -1,0 +1,29 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: qgate-validating-webhook
+  annotations:
+    cert-manager.io/inject-ca-from: qgate-system/qgate-webhook-tls
+spec:
+  webhooks:
+    - name: validate.qgate.kavix.github.com
+      rules:
+        - apiGroups: [""]
+          apiVersions: ["v1"]
+          operations: ["CREATE", "UPDATE"]
+          resources: ["pods"]
+          scope: "Namespaced"
+      clientConfig:
+        service:
+          name: qgate-webhook
+          namespace: qgate-system
+          path: /validate
+      admissionReviewVersions: ["v1"]
+      sideEffects: None
+      timeoutSeconds: 5
+      failurePolicy: Fail
+      namespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: NotIn
+            values: ["kube-system", "qgate-system"]
