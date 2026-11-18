@@ -1,4 +1,4 @@
-// pqcgate is the CLI used in CI to sign and verify image digests.
+// qgate is the CLI used in CI to sign and verify image digests.
 package main
 
 import (
@@ -8,7 +8,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("usage: pqcgate <keygen|sign|verify>")
+		fmt.Println("usage: qgate <keygen|sign|verify>")
 		os.Exit(1)
 	}
 	switch os.Args[1] {
