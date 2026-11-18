@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qgate-webhook
+  namespace: qgate-system
+  labels:
+    app.kubernetes.io/name: qgate
+    app.kubernetes.io/component: webhook
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qgate
+      app.kubernetes.io/component: webhook
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qgate
+        app.kubernetes.io/component: webhook
+    spec:
+      serviceAccountName: qgate-webhook
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: webhook
+          image: ghcr.io/kavix/qgate-webhook:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8443
+              name: https
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/qgate/certs
+              readOnly: true
+            - name: policy
+              mountPath: /etc/qgate/policy
+              readOnly: true
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+      volumes:
+        - name: tls
+          secret:
+            secretName: qgate-webhook-tls
+        - name: policy
+          configMap:
+            name: qgate-policy
