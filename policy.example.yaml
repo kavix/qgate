@@ -1,0 +1,5 @@
+# Which signatures an image must have to be admitted.
+mode: hybrid          # classical | hybrid | pqc-only
+require:
+  - ecdsa-p256
+  - ml-dsa-65
