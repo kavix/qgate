@@ -52,7 +52,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Webhook Container Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: webhook
@@ -62,7 +62,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build qgate CLI Container Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: qgate
